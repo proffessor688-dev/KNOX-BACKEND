@@ -9,38 +9,50 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const app = express();
-
+// 1. Initialize App & Config
 dotenv.config();
-
+const app = express();
 const PORT = process.env.PORT || 5000;
 
+// 2. Setup __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// 3. Connect to Database
 connectDB();
+
+// 4. Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// 5. Updated CORS Configuration
+// Replace 'https://your-frontend.onrender.com' with your actual frontend URL
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      
+      "http://localhost:5173", 
+      "https://your-frontend.onrender.com" 
     ],
     credentials: true,
   })
 );
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// 6. Static Folder for Images
+// This allows: https://your-backend.onrender.com/uploads/image.png
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// 7. Routes
 app.use("/api/auth", userRouter);
 app.use("/api/character", characterRouter);
 app.use("/api/chat", messageRouter);
+
+// Root Health Check
 app.get("/", (req, res) => {
-  res.json({ message: "Server is running" });
+  res.json({ message: "Server is running properly" });
 });
 
+// 8. Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
