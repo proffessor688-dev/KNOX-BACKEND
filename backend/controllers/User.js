@@ -39,11 +39,12 @@ export const loginUser = async (req, res) => {
     return res.status(400).json({ error: "Invalid password" });
   }
   const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: false,
-    maxAge: 3600000,
-  });
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,      // Required for Render (HTTPS)
+  sameSite: "none",  // Required for cross-domain cookies
+  maxAge: 3600000    // 1 hour
+});
   res
     .status(200)
     .json({ message: "Login successful", user: user, token: token });
