@@ -32,7 +32,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", 
-      "https://your-frontend.onrender.com" 
+      "https://your-frontend.onrender.com",
+      "https://your-frontend-url.onrender.com"
     ],
     credentials: true,
   })
