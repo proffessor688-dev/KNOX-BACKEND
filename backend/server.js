@@ -32,15 +32,14 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", 
-      "https://your-frontend.onrender.com",
-      "https://your-frontend-url.onrender.com"
+      "https://knox-frontend.vercel.app" // Your actual Vercel URL from the error logs
     ],
-    credentials: true,
+    credentials: true, // Allows cookies/sessions to pass between Vercel and Render
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 
-// 6. Static Folder for Images
-// This allows: https://your-backend.onrender.com/uploads/image.png
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // 7. Routes
